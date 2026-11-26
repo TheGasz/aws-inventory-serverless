@@ -4,8 +4,7 @@
 **NIU:** 544718  
 **Mata Kuliah:** Komputasi Awan — Individual Project Week 12  
 **Repositori Git:** `https://github.com/TheGasz/aws-inventory-serverless`  
-**Environment AWS:** `AWS Academy Sandbox (Account 420088380228) — Region us-east-1 (N. Virginia)`  
-**Live HTTPS Endpoint:** `https://64dt355mqrfcea76jkd463bnxq0qhcvm.lambda-url.us-east-1.on.aws`
+**Environment AWS:** `AWS Academy Sandbox (Account 420088380228) — Region us-east-1 (N. Virginia)`
 
 ---
 

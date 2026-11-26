@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Inventory CRUD Dashboard — AWS Track C Serverless</title>
+  <style>
+    :root {
+      --bg: #f1f5f9;
+      --surface: #ffffff;
+      --ink: #0f172a;
+      --muted: #475569;
+      --border: #cbd5e1;
+      --ugm: #003f68;
+      --accent: #047857;
+      --accent-hover: #065f46;
+      --danger: #b91c1c;
+      --warn-bg: #fef3c7;
+      --warn-ink: #92400e;
+      --ok-bg: #d1fae5;
+      --ok-ink: #065f46;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.45;
+    }
+    header {
+      background: var(--ugm);
+      color: #fff;
+      padding: 16px 24px;
+      border-bottom: 4px solid #facc15;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+    header h1 { margin: 0; font-size: 20px; }
+    header .sub { font-size: 13px; color: #cbd5e1; margin-top: 2px; }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 12.5px;
+      font-weight: 600;
+      background: #1e293b;
+      color: #e2e8f0;
+    }
+    .pill.ok { background: var(--ok-bg); color: var(--ok-ink); }
+    .pill.err { background: #fee2e2; color: var(--danger); }
+    .container {
+      max-width: 1220px;
+      margin: 20px auto;
+      padding: 0 18px 36px;
+      display: grid;
+      grid-template-columns: 360px 1fr;
+      gap: 18px;
+    }
+    @media (max-width: 920px) {
+      .container { grid-template-columns: 1fr; }
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 18px;
+      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+    }
+    .card h2 {
+      margin: 0 0 12px;
+      font-size: 16px;
+      color: var(--ugm);
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 8px;
+    }
+    .full-span { grid-column: 1 / -1; }
+    .url-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+    input, select {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 13.5px;
+      font-family: inherit;
+    }
+    input:focus { outline: 2px solid #04785733; border-color: var(--accent); }
+    .url-bar input { flex: 1; min-width: 260px; font-family: Consolas, monospace; font-size: 13px; }
+    label {
+      display: block;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+    .field { margin-bottom: 10px; }
+    .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    button {
+      cursor: pointer;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      transition: background 0.15s;
+    }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { background: var(--accent-hover); }
+    .btn-secondary { background: #e2e8f0; color: var(--ink); }
+    .btn-secondary:hover { background: #cbd5e1; }
+    .btn-navy { background: var(--ugm); color: #fff; }
+    .btn-navy:hover { background: #002e4d; }
+    .btn-danger { background: #fee2e2; color: var(--danger); padding: 5px 10px; font-size: 12px; }
+    .btn-danger:hover { background: #fecaca; }
+    .btn-edit { background: #e0f2fe; color: #0369a1; padding: 5px 10px; font-size: 12px; }
+    .btn-edit:hover { background: #bae6fd; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    th {
+      text-align: left;
+      background: #f8fafc;
+      color: var(--muted);
+      font-weight: 700;
+      padding: 9px 8px;
+      border-bottom: 2px solid var(--border);
+    }
+    td {
+      padding: 9px 8px;
+      border-bottom: 1px solid #e2e8f0;
+      vertical-align: middle;
+    }
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 700;
+    }
+    .badge-ok { background: var(--ok-bg); color: var(--ok-ink); }
+    .badge-low { background: var(--warn-bg); color: var(--warn-ink); }
+    pre {
+      margin: 0;
+      background: #0f172a;
+      color: #e2e8f0;
+      padding: 12px;
+      border-radius: 8px;
+      font-family: Consolas, monospace;
+      font-size: 12px;
+      max-height: 220px;
+      overflow: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .actions { display: flex; gap: 6px; }
+    .inspector-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 8px;
+      font-size: 12.5px;
+      font-family: Consolas, monospace;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>Inventory Management — AWS Track C (Serverless)</h1>
+      <div class="sub">Bagas Adjie Pamungkas (NIU: 544718) &bull; AWS Lambda + Amazon DynamoDB (<code>InventoryItems</code>)</div>
+    </div>
+    <div id="healthBadge" class="pill">Checking /health...</div>
+  </header>
+
+  <main class="container">
+    <section class="card full-span">
+      <div class="url-bar">
+        <label for="apiUrl" style="margin:0;white-space:nowrap;">API Base URL:</label>
+        <input id="apiUrl" type="text" placeholder="https://...lambda-url.us-east-1.on.aws" />
+        <button class="btn-navy" type="button" onclick="checkHealth()">Test GET /health</button>
+        <button class="btn-secondary" type="button" onclick="loadItems()">Refresh GET /items</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 id="formTitle">Tambah Item Baru (POST /items)</h2>
+      <form id="itemForm" onsubmit="submitForm(event)">
+        <input type="hidden" id="editItemId" />
+        <div class="row-2">
+          <div class="field">
+            <label for="sku">SKU *</label>
+            <input id="sku" required placeholder="MON-002" />
+          </div>
+          <div class="field">
+            <label for="category">Category</label>
+            <input id="category" placeholder="Electronics" value="Electronics" />
+          </div>
+        </div>
+        <div class="field">
+          <label for="name">Nama Barang *</label>
+          <input id="name" required placeholder="Dell 27 UltraSharp" />
+        </div>
+        <div class="row-2">
+          <div class="field">
+            <label for="quantity">Quantity (Int &ge; 0) *</label>
+            <input id="quantity" type="number" min="0" step="1" required value="5" />
+          </div>
+          <div class="field">
+            <label for="unitPrice">Unit Price (IDR) *</label>
+            <input id="unitPrice" type="number" min="0" step="any" required value="4200000" />
+          </div>
+        </div>
+        <div class="field">
+          <label for="location">Location</label>
+          <input id="location" placeholder="Rack-B2" value="Rack-A1" />
+        </div>
+        <div style="display:flex;gap:8px;margin-top:12px;">
+          <button id="submitBtn" class="btn-primary" type="submit" style="flex:1;">Simpan (POST /items)</button>
+          <button id="cancelBtn" class="btn-secondary" type="button" onclick="resetForm()" style="display:none;">Batal Edit</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>Daftar Item DynamoDB (<span id="itemCount">0</span> item)</h2>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>SKU</th>
+              <th>Nama Barang</th>
+              <th>Kategori</th>
+              <th>Stok</th>
+              <th>Harga Satuan</th>
+              <th>Lokasi</th>
+              <th>Aksi CRUD</th>
+            </tr>
+          </thead>
+          <tbody id="itemsBody">
+            <tr><td colspan="7" style="text-align:center;color:#64748b;">Memuat data dari DynamoDB...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card full-span">
+      <h2>Live HTTP Request &amp; Response Inspector</h2>
+      <div class="inspector-meta">
+        <span id="lastMethod">METHOD: -</span>
+        <span id="lastEndpoint">URL: -</span>
+        <span id="lastStatus">STATUS: -</span>
+      </div>
+      <pre id="responseBox">Klik "Test GET /health", tambah/edit/hapus item, atau klik "Refresh GET /items" untuk melihat respons JSON langsung dari AWS Lambda.</pre>
+    </section>
+  </main>
+
+  <script>
+    const DEFAULT_URL = "https://64dt355mqrfcea76jkd463bnxq0qhcvm.lambda-url.us-east-1.on.aws";
+    const apiInput = document.getElementById("apiUrl");
+    if (window.location.protocol.startsWith("http") && (window.location.host.includes("lambda-url") || window.location.host.includes("execute-api"))) {
+      apiInput.value = window.location.origin;
+    } else {
+      apiInput.value = DEFAULT_URL;
+    }
+
+    function baseUrl() {
+      return apiInput.value.trim().replace(/\/+$/, "");
+    }
+
+    function fmtIdr(n) {
+      return "Rp " + Number(n || 0).toLocaleString("id-ID");
+    }
+
+    async function apiFetch(method, path, bodyObj = null) {
+      const url = baseUrl() + path;
+      const opts = { method, headers: {} };
+      if (bodyObj !== null) {
+        opts.headers["Content-Type"] = "application/json";
+        opts.body = JSON.stringify(bodyObj);
+      }
+      document.getElementById("lastMethod").textContent = "METHOD: " + method;
+      document.getElementById("lastEndpoint").textContent = "URL: " + url;
+      const res = await fetch(url, opts);
+      const text = await res.text();
+      let data = text;
+      try { data = JSON.parse(text); } catch (_) {}
+      document.getElementById("lastStatus").textContent = "STATUS: " + res.status + " " + res.statusText;
+      document.getElementById("responseBox").textContent = typeof data === "string" ? data : JSON.stringify(data, null, 2);
+      if (!res.ok) {
+        throw new Error((data && data.error) ? data.error : ("HTTP " + res.status));
+      }
+      return data;
+    }
+
+    async function checkHealth() {
+      const badge = document.getElementById("healthBadge");
+      try {
+        const data = await apiFetch("GET", "/health");
+        badge.className = "pill ok";
+        badge.textContent = "HEALTHY | DynamoDB: " + (data.dynamodb || "connected");
+      } catch (err) {
+        badge.className = "pill err";
+        badge.textContent = "ERROR: " + err.message;
+      }
+    }
+
+    async function loadItems() {
+      const tbody = document.getElementById("itemsBody");
+      try {
+        const data = await apiFetch("GET", "/items");
+        const items = data.items || [];
+        document.getElementById("itemCount").textContent = items.length;
+        if (items.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#64748b;">Belum ada data di tabel InventoryItems.</td></tr>';
+          return;
+        }
+        tbody.innerHTML = items.map(item => {
+          const qty = Number(item.quantity || 0);
+          const stockBadge = qty < 5
+            ? `<span class="badge badge-low">${qty} (Low)</span>`
+            : `<span class="badge badge-ok">${qty}</span>`;
+          const encoded = encodeURIComponent(JSON.stringify(item));
+          return `
+            <tr>
+              <td><code>${escapeHtml(item.sku)}</code></td>
+              <td><strong>${escapeHtml(item.name)}</strong><br><span style="font-size:11px;color:#64748b;">${escapeHtml(item.item_id)}</span></td>
+              <td>${escapeHtml(item.category || "General")}</td>
+              <td>${stockBadge}</td>
+              <td>${fmtIdr(item.unit_price)}</td>
+              <td>${escapeHtml(item.location || "Unassigned")}</td>
+              <td>
+                <div class="actions">
+                  <button class="btn-edit" type="button" onclick="startEdit('${encoded}')">Edit</button>
+                  <button class="btn-danger" type="button" onclick="deleteItem('${escapeHtml(item.item_id)}')">Hapus</button>
+                </div>
+              </td>
+            </tr>
+          `;
+        }).join("");
+      } catch (err) {
+        tbody.innerHTML = `<tr><td colspan="7" style="color:#b91c1c;">Gagal memuat item: ${escapeHtml(err.message)}</td></tr>`;
+      }
+    }
+
+    function escapeHtml(str) {
+      return String(str ?? "").replace(/[&<>"']/g, s => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[s]));
+    }
+
+    function startEdit(encoded) {
+      const item = JSON.parse(decodeURIComponent(encoded));
+      document.getElementById("editItemId").value = item.item_id;
+      document.getElementById("sku").value = item.sku || "";
+      document.getElementById("name").value = item.name || "";
+      document.getElementById("category").value = item.category || "General";
+      document.getElementById("quantity").value = item.quantity ?? 0;
+      document.getElementById("unitPrice").value = item.unit_price ?? 0;
+      document.getElementById("location").value = item.location || "Unassigned";
+      document.getElementById("formTitle").textContent = "Edit Item (PUT /items/" + item.item_id.slice(0, 8) + "...)";
+      document.getElementById("submitBtn").textContent = "Update (PUT /items/{id})";
+      document.getElementById("cancelBtn").style.display = "inline-block";
+    }
+
+    function resetForm() {
+      document.getElementById("itemForm").reset();
+      document.getElementById("editItemId").value = "";
+      document.getElementById("category").value = "Electronics";
+      document.getElementById("location").value = "Rack-A1";
+      document.getElementById("formTitle").textContent = "Tambah Item Baru (POST /items)";
+      document.getElementById("submitBtn").textContent = "Simpan (POST /items)";
+      document.getElementById("cancelBtn").style.display = "none";
+    }
+
+    async function submitForm(ev) {
+      ev.preventDefault();
+      const editId = document.getElementById("editItemId").value.trim();
+      const payload = {
+        sku: document.getElementById("sku").value.trim(),
+        name: document.getElementById("name").value.trim(),
+        category: document.getElementById("category").value.trim() || "General",
+        quantity: Number(document.getElementById("quantity").value),
+        unit_price: Number(document.getElementById("unitPrice").value),
+        location: document.getElementById("location").value.trim() || "Unassigned",
+      };
+      try {
+        if (editId) {
+          await apiFetch("PUT", "/items/" + encodeURIComponent(editId), payload);
+        } else {
+          await apiFetch("POST", "/items", payload);
+        }
+        resetForm();
+        await loadItems();
+      } catch (err) {
+        alert("Operasi gagal: " + err.message);
+      }
+    }
+
+    async function deleteItem(id) {
+      if (!confirm("Hapus item " + id + " dari DynamoDB?")) return;
+      try {
+        await apiFetch("DELETE", "/items/" + encodeURIComponent(id));
+        await loadItems();
+      } catch (err) {
+        alert("Gagal menghapus: " + err.message);
+      }
+    }
+
+    window.addEventListener("DOMContentLoaded", async () => {
+      await checkHealth();
+      await loadItems();
+    });
+  </script>
+</body>
+</html>

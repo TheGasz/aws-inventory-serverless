@@ -91,7 +91,10 @@ try {
 
     Write-Host "`n=== [4/8] Package & Deploy AWS Lambda ($FunctionName) ===" -ForegroundColor Cyan
     if (Test-Path -Path $zipPath) { Remove-Item -Path $zipPath -Force }
-    Compress-Archive -Path $lambdaFile -DestinationPath $zipPath -Force
+    $frontendFile = Join-Path $repoRoot "frontend\index.html"
+    $bundleFiles = @($lambdaFile)
+    if (Test-Path -Path $frontendFile) { $bundleFiles += $frontendFile }
+    Compress-Archive -Path $bundleFiles -DestinationPath $zipPath -Force
     $zipArg = "fileb://" + ($zipPath -replace "\\", "/")
     $envFile = Write-JsonTemp "lambda_env.json" @{
         Variables = @{

@@ -41,6 +41,8 @@ aws-inventory-serverless/
 │   └── template.yaml                  # CloudFormation IaC (zero IAM::Role creation)
 ├── lambda/
 │   └── lambda_function.py             # Handler Python 3.12 (HTTP API v2, Function URL, REST v1)
+├── frontend/
+│   └── index.html                     # Web UI Dashboard CRUD interaktif (tersedia di GET /ui)
 ├── scripts/
 │   ├── set-sandbox-creds.ps1          # Muat kredensial awsstudent / STS ke ~/.aws/credentials
 │   ├── deploy.ps1                     # 1-command idempotent AWS CLI deployer + Function URL fallback
@@ -63,7 +65,11 @@ aws-inventory-serverless/
         ├── 03-cloudwatch-logs.json
         ├── 04-api-crud-output.txt
         ├── 05-live-health-browser.png
-        └── 06-live-items-browser.png
+        ├── 06-live-items-browser.png
+        ├── 07-live-web-ui-crud.png
+        ├── inventoryDynamoDB.png
+        ├── Lambda.png
+        └── cloudwatch.png
 ```
 
 ## Kontrak Endpoint API
@@ -73,6 +79,7 @@ Base URL dicatat otomatis ke `.last_api_url.txt` oleh script deploy: `https://64
 | Method | Path | Deskripsi | Status Sukses |
 | :--- | :--- | :--- | :--- |
 | `GET` | `/` | Info layanan & daftar endpoint | `200 OK` |
+| `GET` | `/ui` | **Web UI CRUD Dashboard** interaktif di browser | `200 OK` (`HTML`) |
 | `GET` | `/health` | Cek kesehatan API dan koneksi nyata ke DynamoDB | `200 OK` |
 | `POST` | `/items` | Tambah item inventaris baru (`sku`, `name`, `quantity`, `unit_price`) | `201 Created` |
 | `GET` | `/items` | Ambil seluruh daftar item (paginated `Scan`, urut `updated_at` desc) | `200 OK` |

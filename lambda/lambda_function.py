@@ -5,6 +5,7 @@ import os
 import uuid
 from datetime import datetime, timezone
 from decimal import Decimal, InvalidOperation
+from pathlib import Path
 from typing import Any
 
 import boto3
@@ -173,6 +174,7 @@ def lambda_handler(event: dict[str, Any], context: Any) -> dict[str, Any]:
                     "table": TABLE_NAME,
                     "endpoints": [
                         "GET /",
+                        "GET /ui",
                         "GET /health",
                         "POST /items",
                         "GET /items",
@@ -182,6 +184,21 @@ def lambda_handler(event: dict[str, Any], context: Any) -> dict[str, Any]:
                     ],
                 },
             )
+
+        if route_key == "GET /ui":
+            base_dir = Path(__file__).resolve().parent
+            ui_candidates = [base_dir / "index.html", base_dir.parent / "frontend" / "index.html"]
+            ui_file = next((p for p in ui_candidates if p.exists()), None)
+            if ui_file is None:
+                return _response(404, {"error": "UI dashboard tidak ditemukan."})
+            return {
+                "statusCode": 200,
+                "headers": {
+                    "Content-Type": "text/html; charset=utf-8",
+                    "Access-Control-Allow-Origin": "*",
+                },
+                "body": ui_file.read_text(encoding="utf-8"),
+            }
 
         if route_key == "GET /health":
             # Lightweight GetItem verifies real DynamoDB + IAM LabRole connectivity.

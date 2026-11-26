@@ -1,0 +1,12 @@
+{
+  "version": "2.0",
+  "routeKey": "PUT /items/{id}",
+  "rawPath": "/items/<ITEM_ID>",
+  "pathParameters": {
+    "id": "<ITEM_ID>"
+  },
+  "headers": {
+    "content-type": "application/json"
+  },
+  "body": "{\"quantity\":8,\"location\":\"Rack-B1\"}"
+}

@@ -1,0 +1,9 @@
+{
+  "version": "2.0",
+  "routeKey": "POST /items",
+  "rawPath": "/items",
+  "headers": {
+    "content-type": "application/json"
+  },
+  "body": "{\"sku\":\"LAP-001\",\"name\":\"ThinkPad T14 Gen 4\",\"category\":\"Electronics\",\"quantity\":10,\"unit_price\":15500000,\"location\":\"Rack-A1\"}"
+}

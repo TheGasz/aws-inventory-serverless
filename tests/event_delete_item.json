@@ -1,0 +1,8 @@
+{
+  "version": "2.0",
+  "routeKey": "DELETE /items/{id}",
+  "rawPath": "/items/<ITEM_ID>",
+  "pathParameters": {
+    "id": "<ITEM_ID>"
+  }
+}

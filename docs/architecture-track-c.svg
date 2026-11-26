@@ -1,0 +1,176 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 920" width="1600" height="920" role="img" aria-label="Architecture Diagram Track C Serverless Inventory Application">
+  <defs>
+    <style>
+      .title { font-family: 'Segoe UI', Arial, sans-serif; font-size: 26px; font-weight: 700; fill: #0F172A; }
+      .subtitle { font-family: 'Segoe UI', Arial, sans-serif; font-size: 14px; fill: #475569; }
+      .zone-title { font-family: 'Segoe UI', Arial, sans-serif; font-size: 15px; font-weight: 700; fill: #0F172A; }
+      .zone-sub { font-family: 'Segoe UI', Arial, sans-serif; font-size: 12.5px; fill: #334155; }
+      .box-title { font-family: 'Segoe UI', Arial, sans-serif; font-size: 16px; font-weight: 700; fill: #0F172A; }
+      .box-sub { font-family: 'Segoe UI', Arial, sans-serif; font-size: 12.5px; fill: #334155; }
+      .mono { font-family: 'Consolas', 'Courier New', monospace; font-size: 12px; fill: #065F46; font-weight: 600; }
+      .mono-dark { font-family: 'Consolas', 'Courier New', monospace; font-size: 12px; fill: #1E293B; }
+      .arrow-lbl { font-family: 'Segoe UI', Arial, sans-serif; font-size: 12px; font-weight: 600; fill: #1E293B; }
+      .badge-txt { font-family: 'Segoe UI', Arial, sans-serif; font-size: 11px; font-weight: 700; fill: #FFFFFF; }
+    </style>
+    <marker id="arrow-solid" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0,1 L9,5 L0,9 Z" fill="#0F172A" />
+    </marker>
+    <marker id="arrow-green" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0,1 L9,5 L0,9 Z" fill="#047857" />
+    </marker>
+    <marker id="arrow-indigo" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0,1 L9,5 L0,9 Z" fill="#3730A3" />
+    </marker>
+    <marker id="arrow-amber" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0,1 L9,5 L0,9 Z" fill="#B45309" />
+    </marker>
+  </defs>
+
+  <!-- Canvas Background -->
+  <rect x="0" y="0" width="1600" height="920" fill="#F8FAFC" />
+
+  <!-- Header -->
+  <rect x="0" y="0" width="1600" height="86" fill="#FFFFFF" />
+  <line x1="0" y1="86" x2="1600" y2="86" stroke="#CBD5E1" stroke-width="2" />
+  <text x="40" y="38" class="title">Track C (Serverless) Architecture — Inventory Management Microservice</text>
+  <text x="40" y="64" class="subtitle">Bagas Adjie Pamungkas (544718) | AWS Cloud (us-east-1) | Sandbox Account: 420088380228 | Reproducible IaC &amp; CLI</text>
+  <rect x="1310" y="22" width="250" height="40" rx="6" fill="#065F46" />
+  <text x="1435" y="47" text-anchor="middle" class="badge-txt" style="font-size:13px;">0 VM | $0 Idle Cost | No Custom VPC</text>
+
+  <!-- Public Internet Zone -->
+  <rect x="28" y="116" width="242" height="764" rx="12" fill="#FFFFFF" stroke="#94A3B8" stroke-width="1.8" stroke-dasharray="6 4" />
+  <text x="48" y="146" class="zone-title">Public Internet Zone</text>
+  <text x="48" y="166" class="zone-sub">TLS 1.2+ Encrypted Traffic</text>
+
+  <!-- Client Box -->
+  <rect x="46" y="320" width="206" height="156" rx="10" fill="#F1F5F9" stroke="#0F172A" stroke-width="2" />
+  <rect x="46" y="320" width="206" height="32" rx="8" fill="#0F172A" />
+  <text x="149" y="341" text-anchor="middle" class="badge-txt" style="font-size:13px;">Client Applications</text>
+  <text x="149" y="378" text-anchor="middle" class="box-title">PowerShell / Browser</text>
+  <text x="149" y="400" text-anchor="middle" class="box-sub">Invoke-RestMethod / curl</text>
+  <text x="149" y="424" text-anchor="middle" class="mono-dark">HTTPS JSON Requests</text>
+  <text x="149" y="446" text-anchor="middle" class="mono-dark">GET, POST, PUT, DELETE</text>
+
+  <!-- AWS Cloud Boundary -->
+  <rect x="348" y="116" width="1224" height="764" rx="14" fill="#FFFFFF" stroke="#0F172A" stroke-width="2.2" />
+  <rect x="348" y="116" width="1224" height="40" rx="10" fill="#0F172A" />
+  <text x="370" y="142" class="badge-txt" style="font-size:15px;">AWS Cloud — Region: us-east-1 (N. Virginia) | Account: 420088380228</text>
+
+  <!-- Network Boundary Box -->
+  <rect x="370" y="176" width="1180" height="488" rx="10" fill="#F0FDF4" stroke="#047857" stroke-width="1.8" />
+  <text x="390" y="204" class="zone-title" style="fill:#065F46;">Network Boundary: AWS-Managed Serverless Network (No Custom VPC)</text>
+  <text x="390" y="224" class="zone-sub">Traffic between Lambda, DynamoDB, and CloudWatch traverses encrypted AWS private backbone (eliminates NAT Gateway cost &amp; ENI cold starts).</text>
+
+  <!-- HTTPS Entrypoint Box (Function URL + API Gateway Target) -->
+  <rect x="392" y="266" width="286" height="260" rx="10" fill="#FFFFFF" stroke="#047857" stroke-width="2.2" />
+  <rect x="392" y="266" width="286" height="36" rx="8" fill="#047857" />
+  <text x="535" y="289" text-anchor="middle" class="badge-txt" style="font-size:13px;">HTTPS Entrypoint (Payload 2.0)</text>
+  <text x="535" y="326" text-anchor="middle" class="box-title">AWS Lambda Function URL</text>
+  <text x="535" y="346" text-anchor="middle" class="mono">Active in AWS Sandbox</text>
+  <line x1="412" y1="360" x2="658" y2="360" stroke="#CBD5E1" stroke-width="1" />
+  <text x="412" y="382" class="box-sub">• TLS 1.2+ Public Endpoint + CORS (*)</text>
+  <text x="412" y="402" class="box-sub">• Routes: GET /, GET /health,</text>
+  <text x="424" y="420" class="mono-dark">POST/GET /items, /items/{id}</text>
+  <rect x="410" y="438" width="250" height="72" rx="6" fill="#EEF2FF" stroke="#3730A3" stroke-width="1.2" stroke-dasharray="4 3" />
+  <text x="535" y="458" text-anchor="middle" class="box-sub" style="font-weight:700; fill:#312E81;">Production / IaC Target:</text>
+  <text x="535" y="476" text-anchor="middle" class="box-sub" style="fill:#312E81;">API Gateway HTTP API v2</text>
+  <text x="535" y="494" text-anchor="middle" class="mono-dark" style="fill:#312E81;">Throttle: 10 RPS / Burst 20</text>
+
+  <!-- Lambda Compute Box -->
+  <rect x="768" y="266" width="316" height="260" rx="10" fill="#FFFFFF" stroke="#047857" stroke-width="2.2" />
+  <rect x="768" y="266" width="316" height="36" rx="8" fill="#065F46" />
+  <text x="926" y="289" text-anchor="middle" class="badge-txt" style="font-size:13px;">Serverless Compute (Microservice #1)</text>
+  <text x="926" y="326" text-anchor="middle" class="box-title">AWS Lambda</text>
+  <text x="926" y="346" text-anchor="middle" class="mono">inventory-crud-handler</text>
+  <line x1="788" y1="360" x2="1064" y2="360" stroke="#CBD5E1" stroke-width="1" />
+  <text x="788" y="382" class="box-sub">• Runtime: Python 3.12 (x86_64)</text>
+  <text x="788" y="402" class="box-sub">• Memory: 128 MB | Timeout: 10 sec</text>
+  <text x="788" y="422" class="box-sub">• Env: TABLE_NAME=InventoryItems</text>
+  <text x="788" y="442" class="box-sub">• Strict Input Validation (Decimal, Int)</text>
+  <text x="788" y="462" class="box-sub">• Supports HTTP API v2, Function URL,</text>
+  <text x="800" y="480" class="box-sub">and REST API v1.0 payloads</text>
+  <text x="788" y="502" class="mono-dark">JSON Errors: 400 / 404 / 500</text>
+
+  <!-- DynamoDB Box -->
+  <rect x="1186" y="252" width="324" height="190" rx="10" fill="#FFFFFF" stroke="#3730A3" stroke-width="2.2" />
+  <rect x="1186" y="252" width="324" height="36" rx="8" fill="#3730A3" />
+  <text x="1348" y="275" text-anchor="middle" class="badge-txt" style="font-size:13px;">NoSQL Data Store</text>
+  <text x="1348" y="312" text-anchor="middle" class="box-title">Amazon DynamoDB</text>
+  <text x="1348" y="332" text-anchor="middle" class="mono" style="fill:#312E81;">Table: InventoryItems</text>
+  <line x1="1204" y1="344" x2="1492" y2="344" stroke="#CBD5E1" stroke-width="1" />
+  <text x="1204" y="366" class="box-sub">• PK: item_id (String, UUID v4)</text>
+  <text x="1204" y="386" class="box-sub">• Mode: PAY_PER_REQUEST (On-Demand)</text>
+  <text x="1204" y="406" class="box-sub">• Encryption: AWS-Owned Key (SSE)</text>
+  <text x="1204" y="426" class="box-sub">• 9 Attributes (created_at, updated_at)</text>
+
+  <!-- CloudWatch Logs Box -->
+  <rect x="1186" y="464" width="324" height="176" rx="10" fill="#FFFFFF" stroke="#475569" stroke-width="2" />
+  <rect x="1186" y="464" width="324" height="34" rx="8" fill="#334155" />
+  <text x="1348" y="486" text-anchor="middle" class="badge-txt" style="font-size:13px;">Observability &amp; Audit Logs</text>
+  <text x="1348" y="522" text-anchor="middle" class="box-title">Amazon CloudWatch Logs</text>
+  <text x="1348" y="542" text-anchor="middle" class="mono-dark">/aws/lambda/inventory-crud-handler</text>
+  <line x1="1204" y1="554" x2="1492" y2="554" stroke="#CBD5E1" stroke-width="1" />
+  <text x="1204" y="576" class="box-sub">• Retention Policy: 7 Days (Cost-Safe)</text>
+  <text x="1204" y="596" class="box-sub">• Structured JSON: request, create,</text>
+  <text x="1216" y="616" class="box-sub">update, delete, validation warnings</text>
+
+  <!-- IAM & Security Boundary Box (Bottom Left inside AWS Cloud) -->
+  <rect x="370" y="684" width="676" height="178" rx="10" fill="#EEF2FF" stroke="#3730A3" stroke-width="2" />
+  <text x="390" y="710" class="zone-title" style="fill:#312E81;">IAM &amp; Security Boundary</text>
+  <text x="390" y="734" class="box-sub" style="font-weight:700;">1. Lambda Execution Role (Sandbox): LabRole (attached via voclabs PassRole)</text>
+  <text x="390" y="754" class="box-sub">   • Grants STS temporary credentials at runtime (zero hardcoded keys in code)</text>
+  <text x="390" y="778" class="box-sub" style="font-weight:700;">2. Resource-Based Policy on Lambda: fn-url-public + fn-url-invoke-public</text>
+  <text x="390" y="798" class="box-sub">   • Enforces lambda:InvokeFunctionUrl &amp; lambda:InvokeFunction (InvokedViaFunctionUrl=true)</text>
+  <text x="390" y="822" class="box-sub" style="font-weight:700;">3. Least-Privilege Target Policy: 5 DynamoDB CRUD actions on table/InventoryItems</text>
+  <text x="390" y="842" class="box-sub">   • Scoped CloudWatch Logs ARN: /aws/lambda/inventory-crud-handler:*</text>
+
+  <!-- Planned Phase 2 Microservices Box (Bottom Right inside AWS Cloud) -->
+  <rect x="1070" y="684" width="480" height="178" rx="10" fill="#FFFBEB" stroke="#B45309" stroke-width="1.8" stroke-dasharray="7 5" />
+  <text x="1090" y="710" class="zone-title" style="fill:#92400E;">PLANNED — Phase 2 Microservices Evolution</text>
+  <rect x="1092" y="730" width="128" height="58" rx="6" fill="#FFFFFF" stroke="#B45309" stroke-width="1.4" />
+  <text x="1156" y="754" text-anchor="middle" class="box-sub" style="font-weight:700;">DynamoDB</text>
+  <text x="1156" y="772" text-anchor="middle" class="box-sub">Streams</text>
+
+  <rect x="1250" y="730" width="144" height="58" rx="6" fill="#FFFFFF" stroke="#B45309" stroke-width="1.4" />
+  <text x="1322" y="754" text-anchor="middle" class="box-sub" style="font-weight:700;">Stock Alert</text>
+  <text x="1322" y="772" text-anchor="middle" class="box-sub">Lambda (#2)</text>
+
+  <rect x="1424" y="730" width="102" height="58" rx="6" fill="#FFFFFF" stroke="#B45309" stroke-width="1.4" />
+  <text x="1475" y="754" text-anchor="middle" class="box-sub" style="font-weight:700;">Amazon</text>
+  <text x="1475" y="772" text-anchor="middle" class="box-sub">SNS Alert</text>
+
+  <line x1="1220" y1="759" x2="1244" y2="759" stroke="#B45309" stroke-width="1.8" marker-end="url(#arrow-amber)" />
+  <line x1="1394" y1="759" x2="1418" y2="759" stroke="#B45309" stroke-width="1.8" marker-end="url(#arrow-amber)" />
+  <text x="1090" y="820" class="box-sub" style="fill:#78350F;">• Decoupled low-stock alert &amp; StockTransactions audit table</text>
+  <text x="1090" y="840" class="box-sub" style="fill:#78350F;">• Deploy identity: awsstudent (lab_policy) + voclabs (PassRole)</text>
+
+  <!-- Data & Control Flow Arrows -->
+  <!-- Client <-> Entrypoint -->
+  <line x1="252" y1="382" x2="384" y2="382" stroke="#0F172A" stroke-width="2.2" marker-end="url(#arrow-solid)" />
+  <line x1="392" y1="414" x2="260" y2="414" stroke="#047857" stroke-width="2.2" marker-end="url(#arrow-green)" />
+  <text x="310" y="368" text-anchor="middle" class="arrow-lbl">HTTPS Req</text>
+  <text x="310" y="434" text-anchor="middle" class="arrow-lbl" style="fill:#065F46;">JSON Resp</text>
+
+  <!-- Entrypoint <-> Lambda -->
+  <line x1="678" y1="382" x2="760" y2="382" stroke="#0F172A" stroke-width="2.2" marker-end="url(#arrow-solid)" />
+  <line x1="768" y1="414" x2="686" y2="414" stroke="#047857" stroke-width="2.2" marker-end="url(#arrow-green)" />
+  <text x="723" y="368" text-anchor="middle" class="arrow-lbl">Payload 2.0</text>
+  <text x="723" y="434" text-anchor="middle" class="arrow-lbl" style="fill:#065F46;">200/201/4xx</text>
+
+  <!-- Lambda <-> DynamoDB -->
+  <line x1="1084" y1="336" x2="1178" y2="336" stroke="#3730A3" stroke-width="2.2" marker-end="url(#arrow-indigo)" />
+  <line x1="1186" y1="368" x2="1092" y2="368" stroke="#3730A3" stroke-width="2.2" marker-end="url(#arrow-indigo)" />
+  <text x="1135" y="324" text-anchor="middle" class="arrow-lbl" style="fill:#312E81;">boto3 CRUD</text>
+  <text x="1135" y="388" text-anchor="middle" class="arrow-lbl" style="fill:#312E81;">Item / Scan</text>
+
+  <!-- Lambda -> CloudWatch -->
+  <path d="M 1084 472 L 1134 472 L 1134 552 L 1178 552" fill="none" stroke="#475569" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#arrow-solid)" />
+  <text x="1135" y="460" text-anchor="middle" class="arrow-lbl" style="fill:#475569;">JSON Logs</text>
+
+  <!-- IAM -> Lambda -->
+  <path d="M 708 684 L 708 612 L 926 612 L 926 534" fill="none" stroke="#3730A3" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#arrow-indigo)" />
+  <text x="808" y="600" text-anchor="middle" class="arrow-lbl" style="fill:#312E81;">STS Temp Creds (LabRole) &amp; Resource Policy</text>
+
+  <!-- Planned Stream Arrow from DynamoDB cleanly around outer right margin into DynamoDB Streams left side via bottom -->
+  <path d="M 1510 340 L 1534 340 L 1534 670 L 1058 670 L 1058 759 L 1084 759" fill="none" stroke="#B45309" stroke-width="1.8" stroke-dasharray="5 4" marker-end="url(#arrow-amber)" />
+</svg>

@@ -1,0 +1,169 @@
+{
+    "recent_events":  [
+                          {
+                              "timestamp":  1795692752508,
+                              "message":  "INIT_START Runtime Version: python:3.12.mainlinev2.v86\tRuntime Version ARN: arn:aws:lambda:us-east-1::runtime:9d15a516fef11563a8c452bd8d3fe5a5a120b73013e74783e925235557467534\n"
+                          },
+                          {
+                              "timestamp":  1795692752896,
+                              "message":  "START RequestId: 15989c0c-7c87-46cf-a5d7-3112d3646473 Version: $LATEST\n"
+                          },
+                          {
+                              "timestamp":  1795692755429,
+                              "message":  "[INFO]\t2026-11-26T11:32:35.429Z\t15989c0c-7c87-46cf-a5d7-3112d3646473\t{\"event\": \"request_received\", \"route\": \"GET /health\", \"item_id\": null, \"table\": \"InventoryItems\"}\n"
+                          },
+                          {
+                              "timestamp":  1795692755750,
+                              "message":  "END RequestId: 15989c0c-7c87-46cf-a5d7-3112d3646473\n"
+                          },
+                          {
+                              "timestamp":  1795692755750,
+                              "message":  "REPORT RequestId: 15989c0c-7c87-46cf-a5d7-3112d3646473\tDuration: 2853.82 ms\tBilled Duration: 3238 ms\tMemory Size: 128 MB\tMax Memory Used: 90 MB\tInit Duration: 383.64 ms\t\n"
+                          },
+                          {
+                              "timestamp":  1795692756411,
+                              "message":  "START RequestId: 50fb42a5-444a-49d9-9126-1210b7f34e79 Version: $LATEST\n"
+                          },
+                          {
+                              "timestamp":  1795692756413,
+                              "message":  "[INFO]\t2026-11-26T11:32:36.413Z\t50fb42a5-444a-49d9-9126-1210b7f34e79\t{\"event\": \"request_received\", \"route\": \"POST /items\", \"item_id\": null, \"table\": \"InventoryItems\"}\n"
+                          },
+                          {
+                              "timestamp":  1795692756469,
+                              "message":  "[INFO]\t2026-11-26T11:32:36.469Z\t50fb42a5-444a-49d9-9126-1210b7f34e79\t{\"event\": \"item_created\", \"item_id\": \"5f720be2-923b-4aed-8ade-ad647591e83e\", \"sku\": \"LAP-001\"}\n"
+                          },
+                          {
+                              "timestamp":  1795692756490,
+                              "message":  "END RequestId: 50fb42a5-444a-49d9-9126-1210b7f34e79\n"
+                          },
+                          {
+                              "timestamp":  1795692756490,
+                              "message":  "REPORT RequestId: 50fb42a5-444a-49d9-9126-1210b7f34e79\tDuration: 77.92 ms\tBilled Duration: 78 ms\tMemory Size: 128 MB\tMax Memory Used: 90 MB\t\n"
+                          },
+                          {
+                              "timestamp":  1795692757032,
+                              "message":  "START RequestId: 25b8b3bb-f773-4c0c-94af-95ee70dd8a79 Version: $LATEST\n"
+                          },
+                          {
+                              "timestamp":  1795692757034,
+                              "message":  "[INFO]\t2026-11-26T11:32:37.034Z\t25b8b3bb-f773-4c0c-94af-95ee70dd8a79\t{\"event\": \"request_received\", \"route\": \"POST /items\", \"item_id\": null, \"table\": \"InventoryItems\"}\n"
+                          },
+                          {
+                              "timestamp":  1795692757049,
+                              "message":  "[INFO]\t2026-11-26T11:32:37.049Z\t25b8b3bb-f773-4c0c-94af-95ee70dd8a79\t{\"event\": \"item_created\", \"item_id\": \"6bdd4632-3c37-4b81-a5a5-27a1a820ec0f\", \"sku\": \"MON-002\"}\n"
+                          },
+                          {
+                              "timestamp":  1795692757070,
+                              "message":  "END RequestId: 25b8b3bb-f773-4c0c-94af-95ee70dd8a79\n"
+                          },
+                          {
+                              "timestamp":  1795692757070,
+                              "message":  "REPORT RequestId: 25b8b3bb-f773-4c0c-94af-95ee70dd8a79\tDuration: 37.23 ms\tBilled Duration: 38 ms\tMemory Size: 128 MB\tMax Memory Used: 90 MB\t\n"
+                          },
+                          {
+                              "timestamp":  1795692757339,
+                              "message":  "START RequestId: 081c3a17-eb83-45f7-ad14-56d42fefacfc Version: $LATEST\n"
+                          },
+                          {
+                              "timestamp":  1795692757341,
+                              "message":  "[INFO]\t2026-11-26T11:32:37.340Z\t081c3a17-eb83-45f7-ad14-56d42fefacfc\t{\"event\": \"request_received\", \"route\": \"GET /items\", \"item_id\": null, \"table\": \"InventoryItems\"}\n"
+                          },
+                          {
+                              "timestamp":  1795692757370,
+                              "message":  "END RequestId: 081c3a17-eb83-45f7-ad14-56d42fefacfc\n"
+                          },
+                          {
+                              "timestamp":  1795692757370,
+                              "message":  "REPORT RequestId: 081c3a17-eb83-45f7-ad14-56d42fefacfc\tDuration: 30.49 ms\tBilled Duration: 31 ms\tMemory Size: 128 MB\tMax Memory Used: 90 MB\t\n"
+                          },
+                          {
+                              "timestamp":  1795692757650,
+                              "message":  "START RequestId: f4ce4443-6c3f-431c-b7a4-0e471e3a11d6 Version: $LATEST\n"
+                          },
+                          {
+                              "timestamp":  1795692757652,
+                              "message":  "[INFO]\t2026-11-26T11:32:37.652Z\tf4ce4443-6c3f-431c-b7a4-0e471e3a11d6\t{\"event\": \"request_received\", \"route\": \"GET /items/{id}\", \"item_id\": \"6bdd4632-3c37-4b81-a5a5-27a1a820ec0f\", \"table\": \"InventoryItems\"}\n"
+                          },
+                          {
+                              "timestamp":  1795692757710,
+                              "message":  "END RequestId: f4ce4443-6c3f-431c-b7a4-0e471e3a11d6\n"
+                          },
+                          {
+                              "timestamp":  1795692757710,
+                              "message":  "REPORT RequestId: f4ce4443-6c3f-431c-b7a4-0e471e3a11d6\tDuration: 59.21 ms\tBilled Duration: 60 ms\tMemory Size: 128 MB\tMax Memory Used: 90 MB\t\n"
+                          },
+                          {
+                              "timestamp":  1795692758248,
+                              "message":  "START RequestId: 6c782c10-eea2-4129-9d56-68017b112e38 Version: $LATEST\n"
+                          },
+                          {
+                              "timestamp":  1795692758249,
+                              "message":  "[INFO]\t2026-11-26T11:32:38.249Z\t6c782c10-eea2-4129-9d56-68017b112e38\t{\"event\": \"request_received\", \"route\": \"PUT /items/{id}\", \"item_id\": \"6bdd4632-3c37-4b81-a5a5-27a1a820ec0f\", \"table\": \"InventoryItems\"}\n"
+                          },
+                          {
+                              "timestamp":  1795692758290,
+                              "message":  "[INFO]\t2026-11-26T11:32:38.290Z\t6c782c10-eea2-4129-9d56-68017b112e38\t{\"event\": \"item_updated\", \"item_id\": \"6bdd4632-3c37-4b81-a5a5-27a1a820ec0f\"}\n"
+                          },
+                          {
+                              "timestamp":  1795692758310,
+                              "message":  "END RequestId: 6c782c10-eea2-4129-9d56-68017b112e38\n"
+                          },
+                          {
+                              "timestamp":  1795692758310,
+                              "message":  "REPORT RequestId: 6c782c10-eea2-4129-9d56-68017b112e38\tDuration: 61.66 ms\tBilled Duration: 62 ms\tMemory Size: 128 MB\tMax Memory Used: 90 MB\t\n"
+                          },
+                          {
+                              "timestamp":  1795692758833,
+                              "message":  "START RequestId: 34685c02-58fe-42ec-86e6-13cccc5fbc20 Version: $LATEST\n"
+                          },
+                          {
+                              "timestamp":  1795692758835,
+                              "message":  "[INFO]\t2026-11-26T11:32:38.835Z\t34685c02-58fe-42ec-86e6-13cccc5fbc20\t{\"event\": \"request_received\", \"route\": \"POST /items\", \"item_id\": null, \"table\": \"InventoryItems\"}\n"
+                          },
+                          {
+                              "timestamp":  1795692758835,
+                              "message":  "[WARNING]\t2026-11-26T11:32:38.835Z\t34685c02-58fe-42ec-86e6-13cccc5fbc20\t{\"event\": \"validation_error\", \"route\": \"POST /items\", \"detail\": \"Field \u0027quantity\u0027 harus berupa bilangan bulat non-negatif.\"}\n"
+                          },
+                          {
+                              "timestamp":  1795692758850,
+                              "message":  "END RequestId: 34685c02-58fe-42ec-86e6-13cccc5fbc20\n"
+                          },
+                          {
+                              "timestamp":  1795692758850,
+                              "message":  "REPORT RequestId: 34685c02-58fe-42ec-86e6-13cccc5fbc20\tDuration: 15.82 ms\tBilled Duration: 16 ms\tMemory Size: 128 MB\tMax Memory Used: 90 MB\t\n"
+                          },
+                          {
+                              "timestamp":  1795692759444,
+                              "message":  "START RequestId: f8c43ff4-f9f0-4099-8a21-9d0688872e1d Version: $LATEST\n"
+                          },
+                          {
+                              "timestamp":  1795692759448,
+                              "message":  "[INFO]\t2026-11-26T11:32:39.448Z\tf8c43ff4-f9f0-4099-8a21-9d0688872e1d\t{\"event\": \"request_received\", \"route\": \"POST /items\", \"item_id\": null, \"table\": \"InventoryItems\"}\n"
+                          },
+                          {
+                              "timestamp":  1795692759449,
+                              "message":  "[WARNING]\t2026-11-26T11:32:39.449Z\tf8c43ff4-f9f0-4099-8a21-9d0688872e1d\t{\"event\": \"validation_error\", \"route\": \"POST /items\", \"detail\": \"Field \u0027quantity\u0027 tidak boleh negatif.\"}\n"
+                          },
+                          {
+                              "timestamp":  1795692759450,
+                              "message":  "END RequestId: f8c43ff4-f9f0-4099-8a21-9d0688872e1d\n"
+                          },
+                          {
+                              "timestamp":  1795692759450,
+                              "message":  "REPORT RequestId: f8c43ff4-f9f0-4099-8a21-9d0688872e1d\tDuration: 5.80 ms\tBilled Duration: 6 ms\tMemory Size: 128 MB\tMax Memory Used: 90 MB\t\n"
+                          },
+                          {
+                              "timestamp":  1795692759732,
+                              "message":  "START RequestId: 4155b4a7-635e-46b0-90cf-3e4d4678cb89 Version: $LATEST\n"
+                          },
+                          {
+                              "timestamp":  1795692759733,
+                              "message":  "[INFO]\t2026-11-26T11:32:39.733Z\t4155b4a7-635e-46b0-90cf-3e4d4678cb89\t{\"event\": \"request_received\", \"route\": \"DELETE /items/{id}\", \"item_id\": \"6bdd4632-3c37-4b81-a5a5-27a1a820ec0f\", \"table\": \"InventoryItems\"}\n"
+                          }
+                      ],
+    "log_group":  {
+                      "logGroupName":  "/aws/lambda/inventory-crud-handler",
+                      "retentionInDays":  7,
+                      "storedBytes":  0
+                  }
+}

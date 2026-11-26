@@ -1,0 +1,51 @@
+{
+    "scan":  {
+                 "Items":  [
+                               {
+                                   "updated_at":  {
+                                                      "S":  "2026-11-26T11:32:36.413861+00:00"
+                                                  },
+                                   "quantity":  {
+                                                    "N":  "12"
+                                                },
+                                   "location":  {
+                                                    "S":  "Rack-A1"
+                                                },
+                                   "created_at":  {
+                                                      "S":  "2026-11-26T11:32:36.413861+00:00"
+                                                  },
+                                   "item_id":  {
+                                                   "S":  "5f720be2-923b-4aed-8ade-ad647591e83e"
+                                               },
+                                   "category":  {
+                                                    "S":  "Electronics"
+                                                },
+                                   "unit_price":  {
+                                                      "N":  "15500000"
+                                                  },
+                                   "name":  {
+                                                "S":  "ThinkPad T14 Gen 4"
+                                            },
+                                   "sku":  {
+                                               "S":  "LAP-001"
+                                           }
+                               }
+                           ],
+                 "Count":  1,
+                 "ScannedCount":  1,
+                 "ConsumedCapacity":  null
+             },
+    "describe_table":  {
+                           "TableName":  "InventoryItems",
+                           "TableStatus":  "ACTIVE",
+                           "BillingMode":  "PAY_PER_REQUEST",
+                           "KeySchema":  [
+                                             {
+                                                 "AttributeName":  "item_id",
+                                                 "KeyType":  "HASH"
+                                             }
+                                         ],
+                           "ItemCount":  0,
+                           "TableArn":  "arn:aws:dynamodb:us-east-1:420088380228:table/InventoryItems"
+                       }
+}

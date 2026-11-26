@@ -1,0 +1,132 @@
+﻿**********************
+Windows PowerShell transcript start
+Start time: 20261126183231
+Username: MSI\bagas
+RunAs User: MSI\bagas
+Configuration Name: 
+Machine: MSI (Microsoft Windows NT 10.0.26200.0)
+Host Application: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -Command try { $OutputEncoding = [System.Text.UTF8Encoding]::new($false); [Console]::OutputEncoding = $OutputEncoding } catch {}; Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass; Set-Location "d:\UGM\Semester 5\Komputasi Awan\Project P.Azka  Cloud Architect\aws-inventory-serverless"; .\scripts\seed_and_test.ps1; if ($LASTEXITCODE -eq 0) { Write-Output "=== LIVE DYNAMODB SCAN ==="; $env:AWS_PAGER = ''; aws dynamodb scan --table-name InventoryItems --region us-east-1 --output json --no-cli-pager; Write-Output "=== GIT STATUS ==="; git status -s }
+Process ID: 8788
+PSVersion: 5.1.26100.9818
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.26100.9818
+BuildVersion: 10.0.26100.9818
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+Target API URL: https://64dt355mqrfcea76jkd463bnxq0qhcvm.lambda-url.us-east-1.on.aws
+Timestamp UTC : 2026-11-26T11:32:31.5071249Z
+
+=== 1. HEALTH CHECK (GET /health) ===
+{
+    "status":  "healthy",
+    "service":  "inventory-service",
+    "table":  "InventoryItems",
+    "dynamodb":  "connected",
+    "timestamp":  "2026-11-26T11:32:35.731075+00:00"
+}
+
+=== 2A. SEED ITEM (POST /items - disimpan di DynamoDB untuk bukti) ===
+{
+    "item_id":  "5f720be2-923b-4aed-8ade-ad647591e83e",
+    "sku":  "LAP-001",
+    "name":  "ThinkPad T14 Gen 4",
+    "category":  "Electronics",
+    "quantity":  12,
+    "unit_price":  15500000,
+    "location":  "Rack-A1",
+    "created_at":  "2026-11-26T11:32:36.413861+00:00",
+    "updated_at":  "2026-11-26T11:32:36.413861+00:00"
+}
+
+=== 2B. CREATE TEST ITEM (POST /items) ===
+{
+    "item_id":  "6bdd4632-3c37-4b81-a5a5-27a1a820ec0f",
+    "sku":  "MON-002",
+    "name":  "Dell 27 UltraSharp",
+    "category":  "Electronics",
+    "quantity":  5,
+    "unit_price":  4200000,
+    "location":  "Rack-B2",
+    "created_at":  "2026-11-26T11:32:37.034484+00:00",
+    "updated_at":  "2026-11-26T11:32:37.034484+00:00"
+}
+
+=== 3. READ ALL ITEMS (GET /items) ===
+{
+    "items":  [
+                  {
+                      "quantity":  5,
+                      "updated_at":  "2026-11-26T11:32:37.034484+00:00",
+                      "location":  "Rack-B2",
+                      "created_at":  "2026-11-26T11:32:37.034484+00:00",
+                      "item_id":  "6bdd4632-3c37-4b81-a5a5-27a1a820ec0f",
+                      "category":  "Electronics",
+                      "unit_price":  4200000,
+                      "name":  "Dell 27 UltraSharp",
+                      "sku":  "MON-002"
+                  },
+                  {
+                      "updated_at":  "2026-11-26T11:32:36.413861+00:00",
+                      "quantity":  12,
+                      "location":  "Rack-A1",
+                      "created_at":  "2026-11-26T11:32:36.413861+00:00",
+                      "item_id":  "5f720be2-923b-4aed-8ade-ad647591e83e",
+                      "category":  "Electronics",
+                      "unit_price":  15500000,
+                      "name":  "ThinkPad T14 Gen 4",
+                      "sku":  "LAP-001"
+                  }
+              ],
+    "count":  2,
+    "truncated":  false
+}
+
+=== 4. READ ONE ITEM (GET /items/6bdd4632-3c37-4b81-a5a5-27a1a820ec0f) ===
+{
+    "quantity":  5,
+    "updated_at":  "2026-11-26T11:32:37.034484+00:00",
+    "location":  "Rack-B2",
+    "created_at":  "2026-11-26T11:32:37.034484+00:00",
+    "item_id":  "6bdd4632-3c37-4b81-a5a5-27a1a820ec0f",
+    "category":  "Electronics",
+    "unit_price":  4200000,
+    "name":  "Dell 27 UltraSharp",
+    "sku":  "MON-002"
+}
+
+=== 5. UPDATE ITEM (PUT /items/6bdd4632-3c37-4b81-a5a5-27a1a820ec0f) ===
+{
+    "item_id":  "6bdd4632-3c37-4b81-a5a5-27a1a820ec0f",
+    "updated_at":  "2026-11-26T11:32:38.249766+00:00",
+    "category":  "Electronics",
+    "quantity":  8,
+    "location":  "Rack-B1",
+    "unit_price":  4200000,
+    "sku":  "MON-002",
+    "created_at":  "2026-11-26T11:32:37.034484+00:00",
+    "name":  "Dell 27 UltraSharp"
+}
+
+=== 6. NEGATIVE TESTS (Harus 400 Bad Request untuk quantity 3.5 & -1) ===
+PS>TerminatingError(Invoke-RestMethod): "{"error": "Field 'quantity' harus berupa bilangan bulat non-negatif."}"
+Expected 400 for quantity=3.5 -> The remote server returned an error: (400) Bad Request.
+PS>TerminatingError(Invoke-RestMethod): "{"error": "Field 'quantity' tidak boleh negatif."}"
+Expected 400 for quantity=-1 -> The remote server returned an error: (400) Bad Request.
+
+=== 7. DELETE TEST ITEM (DELETE /items/6bdd4632-3c37-4b81-a5a5-27a1a820ec0f) ===
+{
+    "deleted":  "6bdd4632-3c37-4b81-a5a5-27a1a820ec0f"
+}
+
+=== 8. VERIFY DELETED 404 (GET /items/6bdd4632-3c37-4b81-a5a5-27a1a820ec0f) ===
+PS>TerminatingError(Invoke-RestMethod): "{"error": "Item '6bdd4632-3c37-4b81-a5a5-27a1a820ec0f' tidak ditemukan."}"
+Expected 404 after delete -> The remote server returned an error: (404) Not Found.
+
+[PASS] SELURUH SIKLUS HEALTH -> CRUD -> NEGATIVE CHECKS BERHASIL!
+**********************
+Windows PowerShell transcript end
+End time: 20261126183240
+**********************

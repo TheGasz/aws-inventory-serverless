@@ -1,0 +1,12 @@
+.env
+*.pem
+*.key
+.aws/
+credentials*
+__pycache__/
+*.pyc
+.venv/
+*.zip
+.last_api_url.txt
+build/
+*.tmp.json

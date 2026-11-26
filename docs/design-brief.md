@@ -12,10 +12,12 @@
 ## 1. Use Case & Pemilihan Track
 - **Use Case:** Sistem Manajemen Inventaris (*Inventory Management*) untuk mengelola data stok barang secara real-time (`sku`, `name`, `category`, `quantity`, `unit_price`, `location`, `created_at`, `updated_at`).
 - **Track Terpilih:** **Track C — Serverless** (`AWS Lambda Function URL / API Gateway HTTP API v2` + `AWS Lambda Python 3.12` + `Amazon DynamoDB`).
-- **Alasan Pemilihan:**
-  1. **Reproducible untuk Sesi Sandbox 3 Jam:** Seluruh stack didefinisikan secara deklaratif (`infra/template.yaml`) dan otomatis (`scripts/deploy.ps1`), sehingga seluruh infrastruktur dapat dibangun ulang secara identik dalam hitungan detik setiap kali sesi Sandbox di-reset.
-  2. **Efisiensi Biaya & Zero Server Overhead:** Seluruh layanan bersifat *pay-per-request* (biaya `$0` saat idle) tanpa VM EC2 atau NAT Gateway.
-  3. **Lingkup Microservice Terukur:** Untuk memenuhi target Week 12 (`1 entity`, `CRUD endpoints`), implementasi difokuskan pada satu **Inventory Catalog Microservice** (*Single-Function Router Pattern*), disertai rancangan **Phase 2 Microservices** (*Stock Alert Lambda* via DynamoDB Streams + Amazon SNS).
+- **Alasan Pemilihan (Real-World Cloud Architecture Rationale):**
+  1. **Pola Trafik Bursty & Auto-Scaling (*Pay-per-Use*):** Operasional inventaris gudang memiliki beban trafik yang fluktuatif—melonjak saat *inbound*, *checkout*, atau *stock opname*, lalu sepi di luar jam operasional. AWS Lambda dan DynamoDB *On-Demand* melakukan *auto-scaling* instan tanpa *over-provisioning* server serta `$0` biaya komputasi saat idle.
+  2. **Zero Server Management & Built-in High Availability:** Menghilangkan beban operasional *patching* OS, manajemen kapasitas EC2, dan konfigurasi *Multi-AZ failover* manual karena seluruh lapisan komputasi dan penyimpanan dikelola secara *fully managed* oleh AWS.
+  3. **Skema Fleksibel & Latensi Rendah:** DynamoDB (NoSQL) memberikan akses latensi satu digit milidetik berbasis `sku` (*partition key*) dan mendukung atribut produk lintas kategori yang berkembang tanpa migrasi skema relasional yang kaku.
+  4. **Kesiapan Evolusi Event-Driven:** Pola arsitektur ini memudahkan dekomposisi lanjutan ke microservice modular di Phase 2 (*Stock Alert Lambda* via `DynamoDB Streams` + `Amazon SNS`, serta tabel audit `StockTransactions`) tanpa mengganggu layanan API inti.
+  5. **Lingkup Microservice Terukur:** Untuk memenuhi target Week 12 (`1 entity`, `CRUD endpoints`), implementasi difokuskan pada satu **Inventory Catalog Microservice** (*Single-Function Router Pattern*), dengan otomasi IaC (`infra/template.yaml`) & CLI (`scripts/deploy.ps1`) agar lingkungan *dev/staging/lab* dapat direplikasi secara konsisten.
 
 ## 2. Desain Arsitektur, Network, & Keamanan (IAM)
 - **Temuan Lingkungan Sandbox & Keputusan Adaptif:**

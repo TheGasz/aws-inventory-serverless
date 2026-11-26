@@ -128,12 +128,28 @@ def _to_non_negative_int(value: Any, field_name: str) -> int:
     return int(dec)
 
 
+def _extract_item_id(event: dict[str, Any]) -> str | None:
+    """Extract item id from pathParameters or rawPath/path (for Lambda Function URL)."""
+    path_params = event.get("pathParameters") or {}
+    if path_params.get("id"):
+        return str(path_params["id"])
+
+    raw_path = str(event.get("rawPath") or event.get("path") or "").rstrip("/")
+    if raw_path.startswith("/items/"):
+        parts = [p for p in raw_path.split("/") if p]
+        if len(parts) == 2 and parts[0] == "items" and parts[1]:
+            return parts[1]
+    return None
+
+
 def lambda_handler(event: dict[str, Any], context: Any) -> dict[str, Any]:
     """AWS Lambda entrypoint for the Inventory CRUD microservice."""
     route_key = _resolve_route(event)
-    path_params = event.get("pathParameters") or {}
-    item_id = path_params.get("id")
+    item_id = _extract_item_id(event)
     table = get_table()
+
+    if route_key.startswith("OPTIONS "):
+        return _response(200, {"ok": True})
 
     logger.info(
         json.dumps(
@@ -147,6 +163,26 @@ def lambda_handler(event: dict[str, Any], context: Any) -> dict[str, Any]:
     )
 
     try:
+        if route_key == "GET /":
+            return _response(
+                200,
+                {
+                    "service": "inventory-service",
+                    "track": "Track C (Serverless)",
+                    "author": "Bagas Adjie Pamungkas (544718)",
+                    "table": TABLE_NAME,
+                    "endpoints": [
+                        "GET /",
+                        "GET /health",
+                        "POST /items",
+                        "GET /items",
+                        "GET /items/{id}",
+                        "PUT /items/{id}",
+                        "DELETE /items/{id}",
+                    ],
+                },
+            )
+
         if route_key == "GET /health":
             # Lightweight GetItem verifies real DynamoDB + IAM LabRole connectivity.
             table.get_item(Key={"item_id": "__health_probe__"})

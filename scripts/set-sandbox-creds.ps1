@@ -1,32 +1,37 @@
 param(
     [string]$FilePath = "",
+    [string]$AccessKey = "",
+    [string]$SecretKey = "",
     [string]$Region = "us-east-1"
 )
 
 $ErrorActionPreference = "Stop"
 $env:AWS_PAGER = ""
 
-if ($FilePath -ne "") {
-    if (-not (Test-Path -Path $FilePath)) {
-        throw "File kredensial tidak ditemukan: $FilePath"
-    }
-    $raw = Get-Content -Path $FilePath -Raw -Encoding UTF8
+if ($AccessKey -ne "" -and $SecretKey -ne "") {
+    $trimmed = "[default]`r`naws_access_key_id=$AccessKey`r`naws_secret_access_key=$SecretKey"
 } else {
-    $raw = Get-Clipboard -Raw
-}
+    if ($FilePath -ne "") {
+        if (-not (Test-Path -Path $FilePath)) {
+            throw "File kredensial tidak ditemukan: $FilePath"
+        }
+        $raw = Get-Content -Path $FilePath -Raw -Encoding UTF8
+    } else {
+        $raw = Get-Clipboard -Raw
+    }
 
-if ([string]::IsNullOrWhiteSpace($raw)) {
-    throw "Clipboard kosong. Copy isi 'AWS Details -> AWS CLI' dari Vocareum/AWS Academy dulu, lalu jalankan ulang script ini."
-}
+    if ([string]::IsNullOrWhiteSpace($raw)) {
+        throw "Clipboard kosong. Copy blok AWS CLI atau kirim -AccessKey & -SecretKey milik awsstudent."
+    }
 
-$trimmed = $raw.Trim()
-if ($trimmed -notmatch "aws_access_key_id\s*=" -or $trimmed -notmatch "aws_secret_access_key\s*=" -or $trimmed -notmatch "aws_session_token\s*=" ) {
-    throw "Isi clipboard tidak mengandung blok kredensial AWS CLI lengkap (aws_access_key_id, aws_secret_access_key, aws_session_token)."
-}
+    $trimmed = $raw.Trim()
+    if ($trimmed -notmatch "aws_access_key_id\s*=" -or $trimmed -notmatch "aws_secret_access_key\s*=") {
+        throw "Input tidak mengandung aws_access_key_id dan aws_secret_access_key."
+    }
 
-# Normalize header to [default] so aws CLI works without --profile
-if ($trimmed -notmatch "(?m)^\[default\]\s*$") {
-    $trimmed = "[default]`r`n" + $trimmed
+    if ($trimmed -notmatch "(?m)^\[default\]\s*$") {
+        $trimmed = "[default]`r`n" + $trimmed
+    }
 }
 
 $awsDir = Join-Path $env:USERPROFILE ".aws"
@@ -47,12 +52,12 @@ output = json
 "@
 [System.IO.File]::WriteAllText($cfgPath, ($cfgBody + "`r`n"), $utf8NoBom)
 
-Write-Host "[OK] Kredensial Sandbox disimpan ke $credPath (di luar repo Git)." -ForegroundColor Green
+Write-Host "[OK] Kredensial disimpan ke $credPath (di luar repo Git)." -ForegroundColor Green
 Write-Host "[INFO] Memverifikasi koneksi STS..." -ForegroundColor Cyan
 
 $identityRaw = aws sts get-caller-identity --output json
 if ($LASTEXITCODE -ne 0) {
-    throw "Verifikasi STS gagal. Pastikan sesi Sandbox berstatus hijau (Start Lab) dan token belum kedaluwarsa."
+    throw "Verifikasi STS gagal. Pastikan sesi Sandbox berstatus hijau (Start Lab) dan kredensial benar."
 }
 
 $identity = $identityRaw | ConvertFrom-Json

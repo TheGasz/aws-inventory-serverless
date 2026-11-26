@@ -14,14 +14,11 @@ $env:AWS_PAGER = ""
 $repoRoot = Split-Path -Path $PSScriptRoot -Parent
 $templateFile = Join-Path $repoRoot "infra\template.yaml"
 $lambdaFile = Join-Path $repoRoot "lambda\lambda_function.py"
-$buildDir = Join-Path $repoRoot "build"
-$zipPath = Join-Path $buildDir "lambda_function.zip"
+$zipPath = Join-Path ([System.IO.Path]::GetTempPath()) ("inv_cfn_" + [guid]::NewGuid().ToString("N") + ".zip")
 $apiUrlFile = Join-Path $repoRoot ".last_api_url.txt"
 
 if (-not (Test-Path -Path $templateFile)) { throw "Template tidak ditemukan: $templateFile" }
 if (-not (Test-Path -Path $lambdaFile)) { throw "Lambda source tidak ditemukan: $lambdaFile" }
-
-New-Item -ItemType Directory -Path $buildDir -Force | Out-Null
 
 Write-Host "=== [1/3] Deploy CloudFormation Stack ($StackName) ===" -ForegroundColor Cyan
 aws cloudformation deploy `

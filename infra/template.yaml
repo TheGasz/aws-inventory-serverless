@@ -1,0 +1,173 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: >
+  Week 12 Track C (Serverless) - Reproducible Inventory Management API
+  (API Gateway HTTP API v2 + AWS Lambda Python 3.12 + Amazon DynamoDB)
+  Designed for AWS Academy Sandbox / Learner Lab using existing LabRole (zero IAM::Role creation).
+
+Parameters:
+  TableName:
+    Type: String
+    Default: InventoryItems
+    Description: DynamoDB table name for inventory items
+  FunctionName:
+    Type: String
+    Default: inventory-crud-handler
+    Description: Lambda function name
+  ApiName:
+    Type: String
+    Default: inventory-http-api
+    Description: API Gateway HTTP API name
+  LabRoleName:
+    Type: String
+    Default: LabRole
+    Description: Pre-configured AWS Academy IAM execution role name
+  LogRetentionDays:
+    Type: Number
+    Default: 7
+    Description: CloudWatch Logs retention in days
+
+Resources:
+  InventoryTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Ref TableName
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: item_id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: item_id
+          KeyType: HASH
+
+  InventoryLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${FunctionName}"
+      RetentionInDays: !Ref LogRetentionDays
+
+  InventoryFunction:
+    Type: AWS::Lambda::Function
+    DependsOn: InventoryLogGroup
+    Properties:
+      FunctionName: !Ref FunctionName
+      Runtime: python3.12
+      Architectures:
+        - x86_64
+      Handler: lambda_function.lambda_handler
+      Role: !Sub "arn:aws:iam::${AWS::AccountId}:role/${LabRoleName}"
+      Timeout: 10
+      MemorySize: 128
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref InventoryTable
+          LOG_LEVEL: INFO
+      Code:
+        ZipFile: |
+          def lambda_handler(event, context):
+              return {"statusCode": 503, "body": "Bootstrap placeholder. Run scripts/deploy-cfn.ps1 to upload lambda/lambda_function.py."}
+
+  InventoryHttpApi:
+    Type: AWS::ApiGatewayV2::Api
+    Properties:
+      Name: !Ref ApiName
+      ProtocolType: HTTP
+      CorsConfiguration:
+        AllowOrigins:
+          - "*"
+        AllowMethods:
+          - GET
+          - POST
+          - PUT
+          - DELETE
+          - OPTIONS
+        AllowHeaders:
+          - content-type
+
+  LambdaIntegration:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId: !Ref InventoryHttpApi
+      IntegrationType: AWS_PROXY
+      IntegrationUri: !GetAtt InventoryFunction.Arn
+      PayloadFormatVersion: "2.0"
+
+  RouteHealth:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref InventoryHttpApi
+      RouteKey: "GET /health"
+      Target: !Sub "integrations/${LambdaIntegration}"
+
+  RouteCreateItem:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref InventoryHttpApi
+      RouteKey: "POST /items"
+      Target: !Sub "integrations/${LambdaIntegration}"
+
+  RouteListItems:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref InventoryHttpApi
+      RouteKey: "GET /items"
+      Target: !Sub "integrations/${LambdaIntegration}"
+
+  RouteGetItem:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref InventoryHttpApi
+      RouteKey: "GET /items/{id}"
+      Target: !Sub "integrations/${LambdaIntegration}"
+
+  RouteUpdateItem:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref InventoryHttpApi
+      RouteKey: "PUT /items/{id}"
+      Target: !Sub "integrations/${LambdaIntegration}"
+
+  RouteDeleteItem:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref InventoryHttpApi
+      RouteKey: "DELETE /items/{id}"
+      Target: !Sub "integrations/${LambdaIntegration}"
+
+  DefaultStage:
+    Type: AWS::ApiGatewayV2::Stage
+    DependsOn:
+      - RouteHealth
+      - RouteCreateItem
+      - RouteListItems
+      - RouteGetItem
+      - RouteUpdateItem
+      - RouteDeleteItem
+    Properties:
+      ApiId: !Ref InventoryHttpApi
+      StageName: "$default"
+      AutoDeploy: true
+      DefaultRouteSettings:
+        ThrottlingRateLimit: 10
+        ThrottlingBurstLimit: 20
+
+  ApiGatewayInvokePermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !Ref InventoryFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub "arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${InventoryHttpApi}/*/*"
+
+Outputs:
+  ApiInvokeUrl:
+    Description: Base Invoke URL for the Inventory HTTP API
+    Value: !Sub "https://${InventoryHttpApi}.execute-api.${AWS::Region}.amazonaws.com"
+  ApiId:
+    Description: API Gateway HTTP API ID
+    Value: !Ref InventoryHttpApi
+  TableName:
+    Description: DynamoDB table name
+    Value: !Ref InventoryTable
+  FunctionName:
+    Description: Lambda function name
+    Value: !Ref InventoryFunction
